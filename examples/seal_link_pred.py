@@ -13,6 +13,7 @@ from torch_geometric.data import Data, InMemoryDataset
 from torch_geometric.datasets import Planetoid
 from torch_geometric.loader import DataLoader
 from torch_geometric.nn import MLP, GCNConv, global_sort_pool
+from torch_geometric.profile import profileit
 from torch_geometric.transforms import RandomLinkSplit
 from torch_geometric.utils import k_hop_subgraph, to_scipy_sparse_matrix
 
@@ -186,7 +187,8 @@ optimizer = torch.optim.Adam(params=model.parameters(), lr=0.0001)
 criterion = BCEWithLogitsLoss()
 
 
-def train():
+@profileit()
+def train(model, x):
     model.train()
 
     total_loss = 0
@@ -218,7 +220,7 @@ def test(loader):
 
 best_val_auc = test_auc = 0
 for epoch in range(1, 51):
-    loss = train()
+    loss = train(model, dataset.data.x)
     val_auc = test(val_loader)
     if val_auc > best_val_auc:
         best_val_auc = val_auc
