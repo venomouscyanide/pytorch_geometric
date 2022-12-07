@@ -124,6 +124,8 @@ class SEALDataset(InMemoryDataset):
         return z.to(torch.long)
 
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'Planetoid')
 dataset = Planetoid(path, name='Cora')
 
@@ -181,7 +183,7 @@ class DGCNN(torch.nn.Module):
         return self.mlp(x)
 
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print("Device is", device)
 model = DGCNN(hidden_channels=32, num_layers=3).to(device)
 optimizer = torch.optim.Adam(params=model.parameters(), lr=0.0001)
 criterion = BCEWithLogitsLoss()
@@ -221,7 +223,8 @@ def test(loader):
 best_val_auc = test_auc = 0
 for epoch in range(1, 51):
     print(dataset.data.x.get_device())
-    loss = train(model, dataset.data.x)
+    loss, stats = train(model, dataset.data.x)
+    print(stats)
     val_auc = test(val_loader)
     if val_auc > best_val_auc:
         best_val_auc = val_auc
