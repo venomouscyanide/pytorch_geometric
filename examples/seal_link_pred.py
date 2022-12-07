@@ -220,6 +220,7 @@ def test(loader):
 
 best_val_auc = test_auc = 0
 for epoch in range(1, 51):
+    print(dataset.data.x.get_device())
     loss = train(model, dataset.data.x)
     val_auc = test(val_loader)
     if val_auc > best_val_auc:
