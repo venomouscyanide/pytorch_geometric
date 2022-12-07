@@ -127,7 +127,7 @@ class SEALDataset(InMemoryDataset):
 device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'Planetoid')
-dataset = Planetoid(path, name='Cora')
+dataset = Planetoid(path, name='Pubmed')
 
 train_dataset = SEALDataset(dataset, num_hops=2, split='train')
 val_dataset = SEALDataset(dataset, num_hops=2, split='val')
