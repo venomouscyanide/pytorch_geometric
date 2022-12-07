@@ -124,7 +124,7 @@ class SEALDataset(InMemoryDataset):
         return z.to(torch.long)
 
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'Planetoid')
 dataset = Planetoid(path, name='Cora')
@@ -222,7 +222,7 @@ def test(loader):
 
 best_val_auc = test_auc = 0
 for epoch in range(1, 51):
-    print(dataset.data.x.get_device())
+    x = torch.tensor(1, device="cuda:2")
     loss, stats = train(model, dataset.data.x)
     print(stats)
     val_auc = test(val_loader)
