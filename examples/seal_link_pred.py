@@ -223,7 +223,7 @@ def test(loader):
 best_val_auc = test_auc = 0
 for epoch in range(1, 51):
     x = torch.tensor(1, device="cuda:2")
-    loss, stats = train(model, dataset.data.x)
+    loss, stats = train(model, x)
     print(stats)
     val_auc = test(val_loader)
     if val_auc > best_val_auc:
