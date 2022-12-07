@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from scipy.sparse.csgraph import shortest_path
 from sklearn.metrics import roc_auc_score
 from torch.nn import BCEWithLogitsLoss, Conv1d, MaxPool1d, ModuleList
+from tqdm import tqdm
 
 from torch_geometric.data import Data, InMemoryDataset
 from torch_geometric.datasets import Planetoid
@@ -69,7 +70,7 @@ class SEALDataset(InMemoryDataset):
 
     def extract_enclosing_subgraphs(self, edge_index, edge_label_index, y):
         data_list = []
-        for src, dst in edge_label_index.t().tolist():
+        for src, dst in tqdm(edge_label_index.t().tolist()):
             sub_nodes, sub_edge_index, mapping, _ = k_hop_subgraph(
                 [src, dst], self.num_hops, edge_index, relabel_nodes=True)
             src, dst = mapping.tolist()
